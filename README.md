@@ -1,46 +1,54 @@
-# Getting Started with Create React App
+# Desafio Técnico Front-End Pleno/Sênior
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Olá!
 
-## Available Scripts
+Seguem as instruções para a próxima fase do nosso processo seletivo da Datum TI em parceria com a Softplan!
+Crie um projeto utilizando React e a API Graph Countries (https://github.com/lennertVanSever/graphcountries) seguindo as especificações abaixo.
 
-In the project directory, you can run:
+---
 
-### `yarn start`
+### Funcionalidades esperadas:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+- Crie uma lista de cards para exibir os países mostrando a bandeira, o nome e a capital dele;
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Possibilite o usuário buscar países;
 
-### `yarn test`
+- Na lista, o usuário pode ir para a página de detalhes do país e ver uma lista mais completa de informações (bandeira, nome, capital, área, população e top-level domain);
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Crie um formulário para editar os dados de um país (salvando apenas no client-side);
+```
 
-### `yarn build`
+### Restrições técnicas:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+- Utilize o create-react-app como base;
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Utilize redux para gerenciar o estado;
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Utilize react-router para trocar de página;
 
-### `yarn eject`
+- Utilize @testing-library/react para testes;
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Diferenciais:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+- Crie uma pipeline no GitLab; (Exemplo: build => test => deploy);
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Entregar o projeto publicado e funcionando em alguma URL;
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Garanta 100% de cobertura no projeto com testes unitários;
 
-## Learn More
+- Substituir o redux pelo Local state management do Apollo Client;
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Desafio Super Front:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+- Na tela de detalhes do país, adicionar um mapa mostrando a distância entre o país e os 5 países mais próximos;
+```
+
+---
+
+## Bom trabalho e boa sorte!
