@@ -1,23 +1,24 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import {useQuery} from '@apollo/client';
-import {useDispatch, useSelector} from 'react-redux';
 
-import {getCountries} from '../../redux/reducer/countries';
-import {ALL_COUNTRIES} from '../../apollo/countries';
+import {ICountries, ILoadCountries} from '../../interfaces';
+import {LOAD_COUNTRIES} from '../../graphQL/queries';
 
-import CardRedux from '../../components/CardRedux';
-import CardApollo from '../../components/CardApollo';
+import Card from '../../components/Card';
+import Header from '../../components/Header';
+import Loading from '../../components/Loading';
+import ScrollTop from '../../components/ScrollTop';
 
 import {
   Grid,
-  AppBar,
-  Toolbar,
   Container,
   Fab,
-  InputBase,
+  TextField,
+  InputAdornment,
 } from '@material-ui/core';
 import {KeyboardArrowUp, Search} from '@material-ui/icons';
-import ScrollTop from '../../components/ScrollTop';
+
 import useStyles from './styles';
 
 interface IProps {
@@ -26,66 +27,80 @@ interface IProps {
 }
 
 const Home: React.FC<IProps> = (props) => {
+  const [countries, setCountries] = useState<ICountries[]>([]);
+  const [countriesFiltered, setCountriesFiltered] = useState<ICountries[]>([]);
   const [searching, setSearching] = useState('');
 
-  const {search, searchIcon, inputInput, inputRoot} = useStyles();
-  const dispatch = useDispatch();
-  const reduxData = useSelector((state) => state);
-  const {loading, error, data: apolloData} = useQuery(ALL_COUNTRIES);
-
-  const handleGetReduxCountries = useCallback(() => {
-    dispatch(getCountries());
-  }, [dispatch]);
+  const {root, margin} = useStyles();
+  const history = useHistory();
+  const {loading, error, data} = useQuery<ILoadCountries>(LOAD_COUNTRIES);
 
   useEffect(() => {
-    if (error) {
-      handleGetReduxCountries();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+    if (data) setCountries(data.Country);
+  }, [data]);
 
-  if (loading) return <p>Loading... </p>;
+  const handleCountryDetail = useCallback(
+    (_id: string) => {
+      history.push(`/detail/${_id}`);
+    },
+    [history],
+  );
+
+  const handleFilterApollo = useCallback(
+    (countries: ICountries[], search: string, setSearch) => {
+      const filtered = countries?.filter((item) => {
+        return item.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+      });
+
+      setSearch(filtered);
+    },
+    [],
+  );
+
+  const handleChangeInput = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearching(event.target.value);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    handleFilterApollo(countries, searching, setCountriesFiltered);
+  }, [handleFilterApollo, countries, searching, setCountriesFiltered]);
+
+  if (loading) return <Loading active={loading} />;
+
+  if (error) return <p>Error... </p>;
 
   return (
     <>
-      <AppBar>
-        <Container>
-          <Toolbar>
-            <div className={search}>
-              <div className={searchIcon}>
+      <Header>
+        <TextField
+          className={margin}
+          placeholder="Search..."
+          variant="outlined"
+          value={searching}
+          onChange={handleChangeInput}
+          fullWidth
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
                 <Search />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: inputRoot,
-                  input: inputInput,
-                }}
-                value={searching}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearching(e.currentTarget.value)
-                }
-                inputProps={{'aria-label': 'search'}}
-              />
-            </div>
-          </Toolbar>
-        </Container>
-      </AppBar>
-      <Toolbar id="back-to-top-anchor" />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Header>
 
-      <br />
-      <br />
-
-      <Container>
+      <Container className={root}>
         <Grid container spacing={2}>
-          {(error ? reduxData : apolloData)?.Country?.map(
-            (item: any, index: number) => (
+          {(searching.length > 2 ? countriesFiltered : countries)?.map(
+            (item: ICountries, index: number) => (
               <Grid key={index} item xs={12} sm={6} md={4}>
-                {error ? (
-                  <CardRedux country={item} />
-                ) : (
-                  <CardApollo country={item} />
-                )}
+                <Card
+                  country={item}
+                  onClick={() => handleCountryDetail(item._id)}
+                />
               </Grid>
             ),
           )}

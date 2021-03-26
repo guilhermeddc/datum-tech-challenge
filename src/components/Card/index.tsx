@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card,
+  Card as MuiCard,
   CardMedia,
   Typography,
   CardContent,
@@ -8,18 +8,19 @@ import {
   Paper,
 } from '@material-ui/core';
 
-import {ICountryApollo} from '../../interfaces';
+import {ICountries} from '../../interfaces';
 import useStyles from './styles';
 
 interface IProps {
-  country: ICountryApollo;
+  country: ICountries;
+  onClick(): void;
 }
 
-const CardApollo: React.FC<IProps> = ({country}) => {
+const Card: React.FC<IProps> = ({country, onClick}) => {
   const {root, media} = useStyles();
 
   return (
-    <Card className={root} component={Paper} elevation={3}>
+    <MuiCard className={root} component={Paper} elevation={3} onClick={onClick}>
       <CardActionArea>
         <CardMedia
           className={media}
@@ -37,8 +38,8 @@ const CardApollo: React.FC<IProps> = ({country}) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </MuiCard>
   );
 };
 
-export default CardApollo;
+export default Card;
