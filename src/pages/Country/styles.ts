@@ -12,6 +12,19 @@ const useStyles = makeStyles((theme: Theme) =>
     media: {
       height: '70vh',
     },
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    paper: {
+      maxWidth: theme.spacing(100),
+      margin: theme.spacing(16),
+      backgroundColor: theme.palette.background.paper,
+      border: '2px solid #000',
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+    },
   }),
 );
 

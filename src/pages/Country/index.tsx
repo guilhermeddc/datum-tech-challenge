@@ -3,20 +3,24 @@ import {useQuery} from '@apollo/client';
 import {useParams, useHistory} from 'react-router-dom';
 import {
   Box,
-  CardMedia,
-  Container,
-  Divider,
   Grid,
-  IconButton,
+  Modal,
   Paper,
+  Divider,
+  Container,
+  CardMedia,
   Typography,
+  IconButton,
+  TextField,
+  Button,
 } from '@material-ui/core';
 import {
-  BlurOn,
   Http,
-  AccessibilityNew,
-  LocationCity,
+  Edit,
+  BlurOn,
   ChevronLeft,
+  LocationCity,
+  AccessibilityNew,
 } from '@material-ui/icons';
 
 import {LOAD_COUNTRY} from '../../graphQL/queries';
@@ -32,8 +36,15 @@ interface IParamsTypes {
 
 const Country: React.FC = () => {
   const [country, setCountry] = useState<ICountry>({} as ICountry);
+  const [openModal, setOpenModal] = useState(false);
 
-  const {media, root} = useStyles();
+  const [name, setName] = useState('');
+  const [domain, setDomain] = useState('');
+  const [population, setPopulation] = useState('');
+  const [capital, setCapital] = useState('');
+  const [area, setArea] = useState('');
+
+  const {media, root, modal, paper} = useStyles();
   const history = useHistory();
   const {_id} = useParams<IParamsTypes>();
 
@@ -45,9 +56,69 @@ const Country: React.FC = () => {
     if (data) setCountry(data.Country[0]);
   }, [data]);
 
+  useEffect(() => {
+    if (country && _id) {
+      setName(localStorage.getItem(`${_id}:name`) || country.name);
+      setPopulation(
+        localStorage.getItem(`${_id}:population`) || String(country.population),
+      );
+      setCapital(localStorage.getItem(`${_id}:capital`) || country.capital);
+      setArea(localStorage.getItem(`${_id}:area`) || String(country.area));
+      if (country.topLevelDomains?.length > 0)
+        setDomain(
+          localStorage.getItem(`${_id}:domain`) ||
+            country.topLevelDomains[0].name,
+        );
+    }
+  }, [_id, country]);
+
   const handleGoBackNavigator = useCallback(() => {
     history.goBack();
   }, [history]);
+
+  const handleStateModal = useCallback(() => {
+    setOpenModal((state) => !state);
+  }, []);
+
+  const handleChangeName = useCallback((event) => {
+    const {value} = event.target;
+
+    setName(value);
+  }, []);
+
+  const handleChangeDomain = useCallback((event) => {
+    const {value} = event.target;
+
+    setDomain(value);
+  }, []);
+
+  const handleChangePopulation = useCallback((event) => {
+    const {value} = event.target;
+
+    setPopulation(value);
+  }, []);
+
+  const handleChangeCapital = useCallback((event) => {
+    const {value} = event.target;
+
+    setCapital(value);
+  }, []);
+
+  const handleChangeArea = useCallback((event) => {
+    const {value} = event.target;
+
+    setArea(value);
+  }, []);
+
+  const handleSeveEditCountry = useCallback(() => {
+    localStorage.setItem(`${_id}:name`, name);
+    localStorage.setItem(`${_id}:population`, String(population));
+    localStorage.setItem(`${_id}:capital`, capital);
+    localStorage.setItem(`${_id}:area`, String(area));
+    localStorage.setItem(`${_id}:domain`, domain);
+
+    handleStateModal();
+  }, [_id, area, capital, domain, name, population, handleStateModal]);
 
   if (loading && country) return <Loading active={loading} />;
 
@@ -66,33 +137,28 @@ const Country: React.FC = () => {
           <CardMedia
             className={media}
             image={country?.flag?.svgFile}
-            title={country?.name}
+            title={name}
           />
         </Grid>
         <Grid item xs={12} component={Paper} elevation={3} className={root}>
           <Typography variant="h1" align="center">
-            {country?.name}
+            {name}
           </Typography>
           <br />
           <Divider />
           <br />
           <Grid container spacing={2}>
-            <Grid item xs={6} sm={3}>
+            <Grid item xs={5} sm={2}>
               <Typography align="center">
-                Domains:
-                {country?.topLevelDomains?.map(
-                  (item: {name: string}, index: number) => (
-                    <Box
-                      key={index}
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      title="Domain">
-                      <Http color="secondary" />
-                      <strong>{item.name}</strong>
-                    </Box>
-                  ),
-                )}
+                Domain:
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  title="Domain">
+                  <Http color="secondary" />
+                  <strong>{domain}</strong>
+                </Box>
               </Typography>
             </Grid>
             <Grid item xs={6} sm={3}>
@@ -104,7 +170,7 @@ const Country: React.FC = () => {
                   title="Population"
                   justifyContent="center">
                   <AccessibilityNew color="secondary" />
-                  <strong>{country?.population}</strong>
+                  <strong>{population}</strong>
                 </Box>
               </Typography>
             </Grid>
@@ -117,7 +183,7 @@ const Country: React.FC = () => {
                   title="Capital"
                   justifyContent="center">
                   <LocationCity color="secondary" />
-                  <strong>{country?.capital}</strong>
+                  <strong>{capital}</strong>
                 </Box>
               </Typography>
             </Grid>
@@ -131,15 +197,96 @@ const Country: React.FC = () => {
                   title="Area"
                   textAlign="center">
                   <BlurOn color="secondary" />
-                  <strong>{country?.area}</strong>
+                  <strong>{area}</strong>
                 </Box>
               </Typography>
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton onClick={handleStateModal}>
+                <Edit color="secondary" />
+              </IconButton>
             </Grid>
           </Grid>
           <br />
           <Divider />
         </Grid>
       </Grid>
+
+      <Modal open={openModal} onClose={handleStateModal} className={modal}>
+        <Paper className={paper} elevation={3}>
+          <Typography variant="h4" align="center">
+            Edit data for Country
+          </Typography>
+
+          <br />
+          <Divider />
+          <br />
+
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Name"
+                value={name}
+                onChange={handleChangeName}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Domain"
+                value={domain}
+                onChange={handleChangeDomain}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Population"
+                value={population}
+                onChange={handleChangePopulation}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Capital"
+                value={capital}
+                onChange={handleChangeCapital}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Area"
+                value={area}
+                onChange={handleChangeArea}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="flex-end" gridGap={16}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleStateModal}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleSeveEditCountry}>
+                  Save
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Modal>
     </Container>
   );
 };

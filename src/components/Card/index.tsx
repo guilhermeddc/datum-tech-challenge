@@ -25,16 +25,18 @@ const Card: React.FC<IProps> = ({country, onClick}) => {
         <CardMedia
           className={media}
           image={country.flag.svgFile}
-          title={country.name}
+          title={localStorage.getItem(`${country._id}:name`) || country.name}
         />
 
         <CardContent>
           <Typography gutterBottom variant="h6" component="h2">
-            <strong>Name:</strong> {country.name}
+            <strong>Name:</strong>{' '}
+            {localStorage.getItem(`${country._id}:name`) || country.name}
           </Typography>
 
           <Typography gutterBottom variant="h6" component="h2">
-            <strong>Capital:</strong> {country.capital}
+            <strong>Capital:</strong>{' '}
+            {localStorage.getItem(`${country._id}:capital`) || country.capital}
           </Typography>
         </CardContent>
       </CardActionArea>
