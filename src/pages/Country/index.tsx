@@ -44,7 +44,7 @@ const Country: React.FC = () => {
   const [capital, setCapital] = useState('');
   const [area, setArea] = useState('');
 
-  const {media, root, modal, paper} = useStyles();
+  const {title, media, root, modal, paper} = useStyles();
   const history = useHistory();
   const {_id} = useParams<IParamsTypes>();
 
@@ -140,15 +140,18 @@ const Country: React.FC = () => {
             title={name}
           />
         </Grid>
+
         <Grid item xs={12} component={Paper} elevation={3} className={root}>
-          <Typography variant="h1" align="center">
+          <Typography variant="h1" align="center" className={title}>
             {name}
           </Typography>
+
           <br />
           <Divider />
           <br />
+
           <Grid container spacing={2}>
-            <Grid item xs={5} sm={2}>
+            <Grid item xs={6} sm={2}>
               <Typography align="center">
                 Domain:
                 <Box
@@ -161,6 +164,7 @@ const Country: React.FC = () => {
                 </Box>
               </Typography>
             </Grid>
+
             <Grid item xs={6} sm={3}>
               <Typography align="center">
                 Population:
@@ -174,6 +178,7 @@ const Country: React.FC = () => {
                 </Box>
               </Typography>
             </Grid>
+
             <Grid item xs={6} sm={3}>
               <Typography align="center">
                 Capital:
@@ -187,6 +192,7 @@ const Country: React.FC = () => {
                 </Box>
               </Typography>
             </Grid>
+
             <Grid item xs={6} sm={3}>
               <Typography align="center">
                 Area:
@@ -201,12 +207,16 @@ const Country: React.FC = () => {
                 </Box>
               </Typography>
             </Grid>
-            <Grid item xs={1}>
-              <IconButton onClick={handleStateModal}>
-                <Edit color="secondary" />
-              </IconButton>
+
+            <Grid item xs={12} sm={1}>
+              <Box display="flex" justifyContent="center">
+                <IconButton onClick={handleStateModal}>
+                  <Edit color="secondary" />
+                </IconButton>
+              </Box>
             </Grid>
           </Grid>
+
           <br />
           <Divider />
         </Grid>

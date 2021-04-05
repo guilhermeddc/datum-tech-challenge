@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       right: 0,
-      opacity: 0.1,
+      opacity: 0.4,
       transition: 'opacity 0.7s',
       height: theme.spacing(12),
       borderRadius: 4,

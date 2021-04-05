@@ -105,11 +105,6 @@ const Home: React.FC<IProps> = (props) => {
             ),
           )}
         </Grid>
-        <ScrollTop {...props}>
-          <Fab color="secondary" size="small" aria-label="scroll back to top">
-            <KeyboardArrowUp />
-          </Fab>
-        </ScrollTop>
       </Container>
     </>
   );
