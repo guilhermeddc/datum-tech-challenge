@@ -8,16 +8,9 @@ import {LOAD_COUNTRIES} from '../../graphQL/queries';
 import Card from '../../components/Card';
 import Header from '../../components/Header';
 import Loading from '../../components/Loading';
-import ScrollTop from '../../components/ScrollTop';
 
-import {
-  Grid,
-  Container,
-  Fab,
-  TextField,
-  InputAdornment,
-} from '@material-ui/core';
-import {KeyboardArrowUp, Search} from '@material-ui/icons';
+import {Grid, Container, TextField, InputAdornment} from '@material-ui/core';
+import {Search} from '@material-ui/icons';
 
 import useStyles from './styles';
 

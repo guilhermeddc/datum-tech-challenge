@@ -1,5 +1,5 @@
 import {Theme} from '@material-ui/core';
-import {makeStyles, createStyles} from '@material-ui/styles';
+import {makeStyles, createStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
       right: 0,
       opacity: 0.4,
       transition: 'opacity 0.7s',
-      height: theme.spacing(12),
+      height: theme.spacing(12) || 96,
       borderRadius: 4,
       display: 'flex',
       justifyContent: 'space-between',
@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     large: {
-      width: theme.spacing(8),
-      height: theme.spacing(8),
+      width: theme.spacing(8) || 64,
+      height: theme.spacing(8) || 64,
     },
   }),
 );

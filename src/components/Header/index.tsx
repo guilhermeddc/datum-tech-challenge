@@ -4,9 +4,7 @@ import {GitHub, LinkedIn} from '@material-ui/icons';
 
 import useStyles from './styles';
 
-interface IProps {}
-
-const Header: React.FC<IProps> = ({children}) => {
+const Header: React.FC = ({children}) => {
   const {root, grid, large} = useStyles();
   return (
     <Container className={root}>
